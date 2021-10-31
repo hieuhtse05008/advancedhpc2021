@@ -12,7 +12,7 @@ Students are expected to:
 Student Info
 =======================
 
-* Name: MyName
+* Name: Ha Trung Hieu
 * Key:
 
 ```
