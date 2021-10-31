@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.10)  31 OCT 2021 15:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.10)  31 OCT 2021 16:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -55,13 +55,13 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 Here is how much of TeX's memory you used:
  393 strings out of 483183
  6992 string characters out of 5966291
- 232602 words of memory out of 5000000
+ 233602 words of memory out of 5000000
  15479 multiletter control sequences out of 15000+600000
  536184 words of font info for 37 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  25i,6n,19p,206b,212s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/nang/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on /home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/1/labwork1.pdf (1 page, 58200 bytes).
+Output written on /home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/1/labwork1.pdf (1 page, 62666 bytes).
 PDF statistics:
  33 PDF objects out of 1000 (max. 8388607)
  23 compressed objects within 1 object stream
