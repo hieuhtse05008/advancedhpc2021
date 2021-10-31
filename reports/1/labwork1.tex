@@ -1,0 +1,17 @@
+\documentclass{article}
+
+\begin{document}
+Using OpenMP to run in parallel
+
+\begin{itemize}
+	\item Setup the number of threads with x is the number of:
+		\begin{verbatim}
+			omp_set_num_threads(x);
+		\end{verbatim}
+	\item Add flag \textbf{omp} before the for loop
+		\begin{verbatim}
+			#pragma omp parallel for
+		\end{verbatim}
+	\item The result:
+\end{itemize}
+\end{document}
