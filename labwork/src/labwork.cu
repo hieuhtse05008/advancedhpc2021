@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <include/labwork.h>
 #include <cuda_runtime_api.h>
+#include <cuda.h>
 #include <omp.h>
 
 #define ACTIVE_THREADS 4
@@ -163,19 +164,32 @@ void Labwork::labwork2_GPU() {
     }
 
 }
+__global__ void rgb2grayCUDA(uchar3 *input, uchar3 *output) {
+int tid = threadIdx.x + blockIdx.x * blockDim.x;
+output[tid].x = (input[tid].x + input[tid].y +
+input[tid].z) / 3;
+output[tid].z = output[tid].y = output[tid].x;
+}
 
 void Labwork::labwork3_GPU() {
     // Calculate number of pixels
-
+    int pixelCount = inputImage->width * inputImage->height;
+    int blockSize = 64;
+    int numBlock = pixelCount / blockSize;
+    outputImage = static_cast<char *>(malloc(pixelCount * 3));
     // Allocate CUDA memory    
-
     // Copy CUDA Memory from CPU to GPU
-
     // Processing
-
     // Copy CUDA Memory from GPU to CPU
-
     // Cleaning
+    uchar3 *devInput,  *devGray;
+    cudaMalloc(&devInput, pixelCount * sizeof(uchar3));
+    cudaMalloc(&devGray, pixelCount * sizeof(float));
+    cudaMemcpy(devInput, inputImage,pixelCount * sizeof(uchar3),cudaMemcpyHostToDevice);
+    rgb2grayCUDA<<<numBlock, blockSize>>>(devInput, devGray);
+    cudaMemcpy(outputImage, devGray,pixelCount * sizeof(float),cudaMemcpyDeviceToHost);
+    cudaFree(devInput);
+    cudaFree(devGray);
 }
 
 void Labwork::labwork4_GPU() {

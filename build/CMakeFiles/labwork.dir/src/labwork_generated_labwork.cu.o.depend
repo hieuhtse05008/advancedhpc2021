@@ -216,6 +216,7 @@ SET(CUDA_NVCC_DEPEND
  "/usr/local/cuda/include/crt/math_functions.hpp"
  "/usr/local/cuda/include/crt/sm_70_rt.h"
  "/usr/local/cuda/include/crt/sm_70_rt.hpp"
+ "/usr/local/cuda/include/cuda.h"
  "/usr/local/cuda/include/cuda_device_runtime_api.h"
  "/usr/local/cuda/include/cuda_runtime.h"
  "/usr/local/cuda/include/cuda_runtime_api.h"

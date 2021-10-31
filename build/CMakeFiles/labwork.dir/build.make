@@ -528,6 +528,7 @@ CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/inclu
 CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/crt/math_functions.hpp
 CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/crt/sm_70_rt.h
 CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/crt/sm_70_rt.hpp
+CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/cuda.h
 CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/cuda_device_runtime_api.h
 CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/cuda_runtime.h
 CMakeFiles/labwork.dir/src/labwork_generated_labwork.cu.o: /usr/local/cuda/include/cuda_runtime_api.h
