@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(labwork)
 
 include_directories(".")
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11) 
 
 find_package(CUDA)
 if (NOT CUDA_FOUND)
