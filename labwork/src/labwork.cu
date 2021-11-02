@@ -91,7 +91,8 @@ void Labwork::loadInputImage(std::string inputFileName) {
 }
 
 void Labwork::saveOutputImage(std::string outputFileName) {
-    jpegLoader.save(outputFileName, outputImage, inputImage->width, inputImage->height, 90);
+    bool saveImageSuccess = jpegLoader.save(outputFileName, outputImage, inputImage->width, inputImage->height, 90);
+    printf("Saved image: %d\n", saveImageSuccess);
 }
 
 void Labwork::labwork1_CPU() {
@@ -160,6 +161,16 @@ void Labwork::labwork2_GPU() {
         // get informations from individual device
         cudaDeviceProp prop;
         cudaGetDeviceProperties(&prop, i);
+        printf("Device id: %d\n Name: %s\n Core clock speed: %d\n Core count: %d\n Warp size: %d\n",
+        i,
+        prop.name,
+        prop.clockRate, 
+        prop.multiProcessorCount,
+        prop.warpSize
+
+        
+        );
+
         // something more here
     }
 
@@ -172,24 +183,31 @@ output[tid].z = output[tid].y = output[tid].x;
 }
 
 void Labwork::labwork3_GPU() {
-    // Calculate number of pixels
-    int pixelCount = inputImage->width * inputImage->height;
-    int blockSize = 64;
-    int numBlock = pixelCount / blockSize;
-    outputImage = static_cast<char *>(malloc(pixelCount * 3));
-    // Allocate CUDA memory    
+        // Calculate number of pixels
+    // inputImage struct: width, height, buffer
+    int pixelCount = inputImage->width * inputImage->height * 3;
+
+    // Allocate CUDA memory
+    uchar3 *devInput;
+    uchar3 *devOutput;
+    cudaMalloc(&devInput, pixelCount);
+    cudaMalloc(&devOutput, pixelCount);
+
     // Copy CUDA Memory from CPU to GPU
+    cudaMemcpy(devInput, inputImage->buffer, pixelCount, cudaMemcpyHostToDevice);
+
     // Processing
+    int blockSize = 64;
+    int numBlock = pixelCount / (blockSize * 3);
+    rgb2grayCUDA<<<numBlock, blockSize>>>(devInput, devOutput);
+
     // Copy CUDA Memory from GPU to CPU
+    outputImage = (char*) malloc(pixelCount);
+    cudaMemcpy(outputImage, devOutput, pixelCount, cudaMemcpyDeviceToHost);
+
     // Cleaning
-    uchar3 *devInput,  *devGray;
-    cudaMalloc(&devInput, pixelCount * sizeof(uchar3));
-    cudaMalloc(&devGray, pixelCount * sizeof(float));
-    cudaMemcpy(devInput, inputImage,pixelCount * sizeof(uchar3),cudaMemcpyHostToDevice);
-    rgb2grayCUDA<<<numBlock, blockSize>>>(devInput, devGray);
-    cudaMemcpy(outputImage, devGray,pixelCount * sizeof(float),cudaMemcpyDeviceToHost);
     cudaFree(devInput);
-    cudaFree(devGray);
+    cudaFree(devOutput);
 }
 
 void Labwork::labwork4_GPU() {
