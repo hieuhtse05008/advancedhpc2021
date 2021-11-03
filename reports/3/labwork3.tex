@@ -1,4 +1,6 @@
 \documentclass{article}
+\usepackage{graphicx}
+
 \title{Report Labwork 3}
 \author{Ha Trung Hieu}
 
@@ -19,6 +21,13 @@
 	\item Sixthly, I copy the ouput image with \textit{cudaMemcpy()} function in \textit{cudaMemcpyDeviceToHost} mode.
 	\item Finally, I clear the memory with \textit{cudaFree()} function.
 	\item The result:\newline
+	\begin{figure}[ht]
+	\centering
+	\includegraphics[width=.8\textwidth]{labwork3-gpu-out.jpg}
+	\caption{Labwork output image}
+	\label{fig:cat_laptop}
+	\end{figure}
+	
 	USTH ICT Master 2018, Advanced Programming for HPC.\newline
     Warming up...\newline
     Starting labwork 3\newline
