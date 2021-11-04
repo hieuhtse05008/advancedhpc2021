@@ -244,19 +244,19 @@ __global__ void rgb2grayCUDABlock(uchar3 *input, uchar3 *output)
 
 void Labwork::labwork4_GPU()
 {
-    
-    int blockSizes[5] = {32, 64, 128, 256, 512};
-    
-    for (int i = 1; i < 2; i++)
+
+    int blockSizes[5] = {32, 8, 4};
+
+    for (int i = 0; i < 3; i++)
     {
         Timer timer;
-        timer.start();    
+        timer.start();
         //
-        dim3 blockSize = dim3(blockSizes[i],blockSizes[i]);
-        dim3 gridSize = dim3(round(inputImage->width/blockSizes[i]),round(inputImage->height/blockSizes[i]));
+        dim3 blockSize = dim3(blockSizes[i], blockSizes[i]);
+        dim3 gridSize = dim3(round(inputImage->width / blockSizes[i]), round(inputImage->height / blockSizes[i]));
         // dim3 gridSize = dim3(120,68);
         printf("gridSize: %d - blockSize: %d\n", gridSize, blockSize);
-    
+
         // Calculate number of pixels
         // inputImage struct: width, height, buffer
         int pixelCount = inputImage->width * inputImage->height * 3;
@@ -292,12 +292,105 @@ void Labwork::labwork4_GPU()
     }
 }
 
-void Labwork::labwork5_CPU()
+float gaussianBlur[7][7] =
+ 	{{ 0, 0, 1, 2, 1, 0, 0 },
+	{ 0, 3, 13, 22, 13, 3, 0 },
+	{ 1, 13, 59, 97, 59, 13, 1 },
+	{ 2, 22, 97, 159, 97, 22, 2 },
+	{ 1, 13, 59, 97, 59, 13, 1 },
+	{ 0, 3, 13, 22, 13, 3, 0 },
+	{ 0, 0, 1, 2, 1, 0, 0 }};
+
+__device__ float gaussianBlurGPU[7][7] =
+ 	{{ 0, 0, 1, 2, 1, 0, 0 },
+	{ 0, 3, 13, 22, 13, 3, 0 },
+	{ 1, 13, 59, 97, 59, 13, 1 },
+	{ 2, 22, 97, 159, 97, 22, 2 },
+	{ 1, 13, 59, 97, 59, 13, 1 },
+	{ 0, 3, 13, 22, 13, 3, 0 },
+	{ 0, 0, 1, 2, 1, 0, 0 }};
+
+void Labwork::labwork5_CPU() {
+        int pixelCount = inputImage->width * inputImage->height;
+        outputImage = static_cast<char *>(malloc(pixelCount * 3));
+	for (int row = 3; row < inputImage->height-3; row++) {
+		for (int col = 3; col < inputImage->width-3; col++) {
+			int sumR = 0;
+			int sumG = 0;
+			int sumB = 0;
+			for (int j = 0; j < 7; j++) {
+				for (int i = 0; i < 7; i++) {
+					int pos = (col + (i - 3)) + (row + (j - 3)) * inputImage->width;
+					sumR += inputImage->buffer[pos * 3] * gaussianBlur[j][i];
+					sumG += inputImage->buffer[pos * 3+1] * gaussianBlur[j][i];
+					sumB += inputImage->buffer[pos * 3+2] * gaussianBlur[j][i];
+				}
+			}
+			sumR /= 1003;
+			sumG /= 1003;
+			sumB /= 1003;
+			int pos = col+ row * inputImage->width;
+			outputImage[pos * 3] = sumR;
+			outputImage[pos * 3 + 1] = sumG;
+			outputImage[pos * 3 + 2] = sumB;
+		}
+        }
+	printf("finished labwork5 CPU\n");
+}
+
+__global__ void gaussianCUDABlock(uchar3 *input, uchar3 *output)
 {
+    int tid_x = threadIdx.x + blockIdx.x * blockDim.x;
+    int tid_y = threadIdx.y + blockIdx.y * blockDim.y;
+    int tid = tid_x + blockDim.x * gridDim.x * tid_y;
+
+    int sumR = 0, sumG = 0, sumB = 0;
+    for (int i = -3; i <= 3; ++i)
+        for (int j = -3; j <= 3; ++j)
+        {
+            int cell_tid = tid + i * blockDim.x * gridDim.x + j;
+            sumR += input[cell_tid].x * gaussianBlurGPU[i + 3][j + 3];
+            sumG += input[cell_tid].y * gaussianBlurGPU[i + 3][j + 3];
+            sumB += input[cell_tid].z * gaussianBlurGPU[i + 3][j + 3];
+        }
+
+    output[tid].x = sumR / 1003;
+    output[tid].y = sumG / 1003;
+    output[tid].z = sumB / 1003;
 }
 
 void Labwork::labwork5_GPU()
 {
+    int size = 8;
+    dim3 blockSize = dim3(size, size);
+    dim3 gridSize = dim3(round(inputImage->width / size), round(inputImage->height / size));
+    // dim3 gridSize = dim3(120,68);
+    printf("gridSize: %d - size: %d\n", gridSize, size);
+
+    // Calculate number of pixels
+    // inputImage struct: width, height, buffer
+    int pixelCount = inputImage->width * inputImage->height * 3;
+
+    // Allocate CUDA memory
+    uchar3 *devInput;
+    uchar3 *devOutput;
+    cudaMalloc(&devInput, pixelCount * sizeof(uchar3));
+    cudaMalloc(&devOutput, pixelCount * sizeof(uchar3));
+
+    // Copy CUDA Memory from CPU to GPU
+    cudaMemcpy(devInput, inputImage->buffer, pixelCount, cudaMemcpyHostToDevice);
+
+    // Processing
+    gaussianCUDABlock<<<gridSize, blockSize>>>(devInput, devOutput);
+
+    // Copy CUDA Memory from GPU to CPU
+    outputImage = (char *)malloc(pixelCount * 3);
+    cudaMemcpy(outputImage, devOutput, pixelCount, cudaMemcpyDeviceToHost);
+
+    // Cleaning
+    cudaFree(devInput);
+    cudaFree(devOutput);
+    printf("finished labwork5 GPU\n");
 }
 
 void Labwork::labwork6_GPU()

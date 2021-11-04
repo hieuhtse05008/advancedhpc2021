@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.10)  3 NOV 2021 21:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.10)  4 NOV 2021 18:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -90,22 +90,11 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 19.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 19.
-
-
-LaTeX Warning: File `labwork4-gpu-out.jpg' not found on input line 26.
-
-
-/home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/4/labwork4.tex:26: Package pdftex.def Error: File `labwork4-gpu-out.jpg' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.26 ...[width=.8\textwidth]{labwork4-gpu-out.jpg}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
+<labwork4-gpu-out.jpg, id=1, 3653.65pt x 2740.2375pt>
+File: labwork4-gpu-out.jpg Graphic file (type jpg)
+<use labwork4-gpu-out.jpg>
+Package pdftex.def Info: labwork4-gpu-out.jpg  used on input line 26.
+(pdftex.def)             Requested size: 276.00105pt x 206.97238pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 31--35
 
@@ -113,24 +102,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--35
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (/home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/4/labwork4.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2 </home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/4/labwork4-gpu-out.jpg>] (/home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/4/labwork4.aux) ) 
 Here is how much of TeX's memory you used:
- 1193 strings out of 483183
- 17910 string characters out of 5966291
- 245495 words of memory out of 5000000
- 16230 multiletter control sequences out of 15000+600000
- 536530 words of font info for 38 fonts, out of 8000000 for 9000
+ 1169 strings out of 483183
+ 17596 string characters out of 5966291
+ 245503 words of memory out of 5000000
+ 16219 multiletter control sequences out of 15000+600000
+ 536362 words of font info for 37 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 30i,6n,25p,240b,324s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/nang/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on /home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/4/labwork4.pdf (2 pages, 96870 bytes).
+ 30i,6n,25p,240b,285s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/nang/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on /home/nang/hieuht_ictlab/hpc/advancedhpc2021/reports/4/labwork4.pdf (2 pages, 1506531 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
- 34 compressed objects within 1 object stream
+ 45 PDF objects out of 1000 (max. 8388607)
+ 31 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
