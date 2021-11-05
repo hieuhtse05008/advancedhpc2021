@@ -293,49 +293,54 @@ void Labwork::labwork4_GPU()
 }
 
 float gaussianBlur[7][7] =
- 	{{ 0, 0, 1, 2, 1, 0, 0 },
-	{ 0, 3, 13, 22, 13, 3, 0 },
-	{ 1, 13, 59, 97, 59, 13, 1 },
-	{ 2, 22, 97, 159, 97, 22, 2 },
-	{ 1, 13, 59, 97, 59, 13, 1 },
-	{ 0, 3, 13, 22, 13, 3, 0 },
-	{ 0, 0, 1, 2, 1, 0, 0 }};
+    {{0, 0, 1, 2, 1, 0, 0},
+     {0, 3, 13, 22, 13, 3, 0},
+     {1, 13, 59, 97, 59, 13, 1},
+     {2, 22, 97, 159, 97, 22, 2},
+     {1, 13, 59, 97, 59, 13, 1},
+     {0, 3, 13, 22, 13, 3, 0},
+     {0, 0, 1, 2, 1, 0, 0}};
 
 __device__ float gaussianBlurGPU[7][7] =
- 	{{ 0, 0, 1, 2, 1, 0, 0 },
-	{ 0, 3, 13, 22, 13, 3, 0 },
-	{ 1, 13, 59, 97, 59, 13, 1 },
-	{ 2, 22, 97, 159, 97, 22, 2 },
-	{ 1, 13, 59, 97, 59, 13, 1 },
-	{ 0, 3, 13, 22, 13, 3, 0 },
-	{ 0, 0, 1, 2, 1, 0, 0 }};
+    {{0, 0, 1, 2, 1, 0, 0},
+     {0, 3, 13, 22, 13, 3, 0},
+     {1, 13, 59, 97, 59, 13, 1},
+     {2, 22, 97, 159, 97, 22, 2},
+     {1, 13, 59, 97, 59, 13, 1},
+     {0, 3, 13, 22, 13, 3, 0},
+     {0, 0, 1, 2, 1, 0, 0}};
 
-void Labwork::labwork5_CPU() {
-        int pixelCount = inputImage->width * inputImage->height;
-        outputImage = static_cast<char *>(malloc(pixelCount * 3));
-	for (int row = 3; row < inputImage->height-3; row++) {
-		for (int col = 3; col < inputImage->width-3; col++) {
-			int sumR = 0;
-			int sumG = 0;
-			int sumB = 0;
-			for (int j = 0; j < 7; j++) {
-				for (int i = 0; i < 7; i++) {
-					int pos = (col + (i - 3)) + (row + (j - 3)) * inputImage->width;
-					sumR += inputImage->buffer[pos * 3] * gaussianBlur[j][i];
-					sumG += inputImage->buffer[pos * 3+1] * gaussianBlur[j][i];
-					sumB += inputImage->buffer[pos * 3+2] * gaussianBlur[j][i];
-				}
-			}
-			sumR /= 1003;
-			sumG /= 1003;
-			sumB /= 1003;
-			int pos = col+ row * inputImage->width;
-			outputImage[pos * 3] = sumR;
-			outputImage[pos * 3 + 1] = sumG;
-			outputImage[pos * 3 + 2] = sumB;
-		}
+void Labwork::labwork5_CPU()
+{
+    int pixelCount = inputImage->width * inputImage->height;
+    outputImage = static_cast<char *>(malloc(pixelCount * 3));
+    for (int row = 3; row < inputImage->height - 3; row++)
+    {
+        for (int col = 3; col < inputImage->width - 3; col++)
+        {
+            int sumR = 0;
+            int sumG = 0;
+            int sumB = 0;
+            for (int j = 0; j < 7; j++)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    int pos = (col + (i - 3)) + (row + (j - 3)) * inputImage->width;
+                    sumR += inputImage->buffer[pos * 3] * gaussianBlur[j][i];
+                    sumG += inputImage->buffer[pos * 3 + 1] * gaussianBlur[j][i];
+                    sumB += inputImage->buffer[pos * 3 + 2] * gaussianBlur[j][i];
+                }
+            }
+            sumR /= 1003;
+            sumG /= 1003;
+            sumB /= 1003;
+            int pos = col + row * inputImage->width;
+            outputImage[pos * 3] = sumR;
+            outputImage[pos * 3 + 1] = sumG;
+            outputImage[pos * 3 + 2] = sumB;
         }
-	printf("finished labwork5 CPU\n");
+    }
+    printf("finished labwork5 CPU\n");
 }
 
 __global__ void gaussianCUDABlock(uchar3 *input, uchar3 *output)
@@ -393,8 +398,47 @@ void Labwork::labwork5_GPU()
     printf("finished labwork5 GPU\n");
 }
 
+__device__ int grayscale_binary(int val){
+    return val < 155 ? 0 : 255;
+}
+__global__ void  grayscaleImageBinarization(uchar3 *input, uchar3 *output)
+{
+    int tid_x = threadIdx.x + blockIdx.x * blockDim.x;
+    int tid_y = threadIdx.y + blockIdx.y * blockDim.y;
+    int tid = tid_x + blockDim.x * gridDim.x * tid_y;
+    output[tid].x = grayscale_binary(input[tid].x);
+    output[tid].z = output[tid].y = output[tid].x;
+}
 void Labwork::labwork6_GPU()
 {
+    
+    // Calculate number of pixels
+    int pixelCount = inputImage->width * inputImage->height * 3;
+    outputImage = static_cast<char *>(malloc(pixelCount));
+    
+    // Allocate CUDA memory
+    uchar3 *devInput;
+    uchar3 *devOutput;
+    cudaMalloc(&devInput, pixelCount * sizeof(uchar3));
+    cudaMalloc(&devOutput, pixelCount * sizeof(uchar3));
+
+    // Copy CUDA Memory from CPU to GPU
+    cudaMemcpy(devInput, inputImage->buffer, pixelCount, cudaMemcpyHostToDevice);
+
+    int size = 8;
+    dim3 blockSize = dim3(size, size);
+    dim3 gridSize = dim3(round(inputImage->width / size), round(inputImage->height / size));
+    
+    // Processing
+    grayscaleImageBinarization<<<gridSize, blockSize>>>(devInput, devOutput);
+
+    // Copy CUDA Memory from GPU to CPU
+    cudaMemcpy(outputImage, devOutput, pixelCount, cudaMemcpyDeviceToHost);
+
+    // Cleaning
+    cudaFree(devInput);
+    cudaFree(devOutput);
+    printf("finished labwork5 GPU\n");
 }
 
 void Labwork::labwork7_GPU()
